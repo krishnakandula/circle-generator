@@ -21,13 +21,13 @@ public class CircleGenerator : MonoBehaviour
             DestroyOldPoints();
             ClearPointCreationCoroutines();
             coroutines.Add(
-                StartCoroutine(generatePointsOnCircle(granularity, radius, pointCreationDelay, yOffset, zOffset)));
+                StartCoroutine(GeneratePointsOnCircle(granularity, radius, pointCreationDelay, yOffset, zOffset)));
         }
     }
 
     private void DestroyOldPoints()
     {
-        List<GameObject> children = getAllChildren();
+        List<GameObject> children = GetAllChildren();
         foreach (GameObject child in children)
         {
             Destroy(child);
@@ -44,7 +44,7 @@ public class CircleGenerator : MonoBehaviour
         coroutines.Clear();
     }
 
-    private IEnumerator generatePointsOnCircle(int granularity, float radius, float pointCreationDelay, float yOffset,
+    private IEnumerator GeneratePointsOnCircle(int granularity, float radius, float pointCreationDelay, float yOffset,
         float zOffset)
     {
         if (pointPrefab == null)
@@ -53,7 +53,7 @@ public class CircleGenerator : MonoBehaviour
             yield return null;
         }
 
-        float[] angles = generateAngles(granularity);
+        float[] angles = GenerateAngles(granularity);
         for (int i = 0; i < angles.Length; ++i)
         {
             float angle = angles[i];
@@ -62,13 +62,13 @@ public class CircleGenerator : MonoBehaviour
             double yCoord = radius * Math.Sin(angleInRadians);
 
             Vector3 pos = new Vector3((float) xCoord, (float) (yCoord + yOffset), zOffset);
-            createPoint(pos);
+            CreatePoint(pos);
             yield return new WaitForSeconds(pointCreationDelay);
         }
     }
 
 
-    private float[] generateAngles(int granularity)
+    private static float[] GenerateAngles(int granularity)
     {
         float[] angles = new float[granularity];
         float angle = 360f / granularity;
@@ -80,7 +80,7 @@ public class CircleGenerator : MonoBehaviour
         return angles;
     }
 
-    private void createPoint(Vector3 position)
+    private void CreatePoint(Vector3 position)
     {
         Debug.Log("Creating point at position " + position);
         GameObject point = Instantiate(pointPrefab, transform);
@@ -92,7 +92,7 @@ public class CircleGenerator : MonoBehaviour
     }
 
 
-    private List<GameObject> getAllChildren()
+    private List<GameObject> GetAllChildren()
     {
         List<GameObject> children = new List<GameObject>();
         Transform[] childTransforms = transform.GetComponentsInChildren<Transform>();
